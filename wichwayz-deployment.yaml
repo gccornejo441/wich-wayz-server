@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wichwayz-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wichwayz-server
+  template:
+    metadata:
+      labels:
+        app: wichwayz-server
+    spec:
+      imagePullSecrets:
+      - name: ghcr-secret
+      containers:
+      - name: wichwayz-server
+        image: ghcr.io/gccornejo441/wich-wayz-server:latest
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wichwayz-server
+spec:
+  selector:
+    app: wichwayz-server
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: ClusterIP
